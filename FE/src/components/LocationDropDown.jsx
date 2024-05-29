@@ -1,12 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import LocationIcon from "../assets/maps-and-flags.png";
 import { ToggleContext } from "../contexts/toggleContext";
 import { useTranslation } from "react-i18next";
+import ArrowDown from "../assets/down-arrow.png";
+import ArrowUp from "../assets/up-arrow.png";
 
 export default function LocationDropDown() {
   const { t } = useTranslation();
   const { selected, setSelected } = useContext(ToggleContext);
+  const [clickDropDown, setClickDropDown] = useState(false);
 
+  const handleDropDown = () => {
+    setClickDropDown((prevStatus) => !prevStatus);
+  };
   const handleSelectCange = (e) => {
     setSelected(e.target.value);
   };
@@ -17,9 +23,10 @@ export default function LocationDropDown() {
         <img src={LocationIcon} alt="location-icon" className="mx-2" />
       </div>
       <select
-        className="appearance-none w-full py-2 px-4 pl-8 bg-white border border-blue-100 rounded-xl leading-tight focus:outline-none focus:border-green-500"
+        className="appearance-none w-full py-2 px-4 pl-8 bg-white border border-blue-100 rounded-xl leading-tight focus:outline-none focus:border-green-500 cursor-pointer"
         value={selected}
         onChange={handleSelectCange}
+        onClick={handleDropDown}
         required
       >
         {selected === "Delivery" ? (
@@ -37,14 +44,12 @@ export default function LocationDropDown() {
           </>
         )}
       </select>
-      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-green">
-        <svg
-          className="fill-current h-4 w-4"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-        >
-          <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-        </svg>
+      <div className="pointer-events-none absolute w-[1.7rem] inset-y-0 right-0 flex items-center px-2 text-green">
+        {clickDropDown ? (
+          <img src={ArrowUp} alt="arrow-up" />
+        ) : (
+          <img src={ArrowDown} alt="arrow-down" />
+        )}
       </div>
     </div>
   );

@@ -1,10 +1,13 @@
 import React from "react";
-import Navbar from "./components/Navbar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Landingpage from "./pages/Landingpage";
 
 export default function App() {
   return (
-    <>
-      <Navbar />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Landingpage />} />
+      </Routes>
+    </Router>
   );
 }
