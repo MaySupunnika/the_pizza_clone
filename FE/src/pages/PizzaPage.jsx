@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import SlideCard from "../components/SlideCard";
 import Cart from "../components/cart";
 
-export default function Landingpage() {
+export default function PizzaPage() {
   return (
     <>
       <Navbar />
