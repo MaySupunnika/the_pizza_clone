@@ -40,7 +40,7 @@ export default function SwitchLang() {
         </div>
       </div>
       {isDropdownOpen && (
-        <div className="absolute top-[4rem] w-[7rem] h-[6rem] flex flex-col items-center justify-center drop-shadow-langbox bg-white">
+        <div className="z-[999] absolute top-[4rem] w-[7rem] h-[6rem] flex flex-col items-center justify-center drop-shadow-langbox bg-white">
           <p
             className="hover:bg-blue-300 w-[80%] h-[40%] flex items-center pl-1 font-semibold text-sm cursor-pointer"
             onClick={() => handleChangeLang("en")}

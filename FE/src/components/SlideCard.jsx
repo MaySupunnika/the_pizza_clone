@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PizzaImg from "../assets/pizza-v3.webp";
 import PizzaPuff from "../assets/Cheesy_Square_210x232.webp";
 import SpecialDeal from "../assets/SpecialDeals.webp";
@@ -21,13 +21,32 @@ import "../css/SlideCard.css";
 
 export default function SlideCard() {
   const { t } = useTranslation();
+  const [selectCard, setSelectCard] = useState(null);
+
+  const handleSelectCard = (index) => {
+    setSelectCard(index);
+  };
+
+  const slides = [
+    { src: PizzaImg, label: t("pizza") },
+    { src: PizzaPuff, label: t("cheesy puff & square pizza") },
+    { src: SpecialDeal, label: t("special deals") },
+    { src: ValueSet, label: t("value set") },
+    { src: Appetizer, label: t("appetizer") },
+    { src: Chicken, label: t("chicken") },
+    { src: Pasta, label: t("pasta") },
+    { src: Salad, label: t("salad & steak") },
+    { src: Drinks, label: t("drinks & desserts") },
+  ];
+
   return (
     <>
       <Swiper
-        autoplay={{
-          delay: 2000,
-          disableOnInteraction: false,
-        }}
+        autoplay={
+          selectCard === null
+            ? { delay: 2000, disableOnInteraction: false }
+            : null
+        }
         slidesPerView={7}
         freeMode={true}
         pagination={{
@@ -36,17 +55,27 @@ export default function SlideCard() {
         modules={[Pagination, FreeMode, Autoplay]}
         className="mySwiper flex justify-center items-center w-[55rem] h-[11rem] px-4"
       >
-        <SwiperSlide>
-          <div className="flex flex-col w-[6rem] h-[8.5rem] cursor-pointer">
-            <div className="w-full h-[65%] rounded-t-lg overflow-hidden">
-              <img src={PizzaImg} alt="pizza-img" />
+        {slides.map((card, index) => (
+          <SwiperSlide key={index}>
+            <div
+              className="flex flex-col w-[6rem] h-[8.5rem] cursor-pointer"
+              onClick={() => handleSelectCard(index)}
+            >
+              <div className="w-full h-[65%] rounded-t-lg overflow-hidden">
+                <img src={card.src} alt={card.label} />
+              </div>
+              <p
+                className={`bg-white h-[35%] w-[100%] rounded-b-lg text-xs font-semibold pt-[0.3rem] pl-[0.3rem] hover:bg-blue-300 ${
+                  selectCard === index ? "bg-soft-green" : ""
+                }`}
+              >
+                {card.label}
+              </p>
             </div>
-            <p className="bg-white h-[35%] w-[100%] rounded-b-lg text-xs font-semibold pt-[0.3rem] pl-[0.3rem] hover:bg-blue-300">
-              {t("pizza")}
-            </p>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
+          </SwiperSlide>
+        ))}
+
+        {/* <SwiperSlide>
           <div className="flex flex-col w-[6rem] h-[8.5rem] cursor-pointer">
             <div className="w-full h-[65%] rounded-t-lg overflow-hidden">
               <img src={PizzaPuff} alt="pizza-puff-img" />
@@ -126,7 +155,7 @@ export default function SlideCard() {
               {t("drinks & desserts")}
             </p>
           </div>
-        </SwiperSlide>
+        </SwiperSlide> */}
       </Swiper>
     </>
   );

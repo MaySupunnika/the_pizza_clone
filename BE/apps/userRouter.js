@@ -46,26 +46,26 @@ userRouter.post("/", async (req, res) => {
   }
 });
 
-// userRouter.put(":/id", async (req, res) => {
-//   const id = req.params.id;
-//   try {
-//     const { data, error } = await supabase
-//       .from("Users")
-//       .update({
-//         user_name: req.body.name,
-//         birth_date: req.body.birth_date,
-//         address: req.body.address,
-//         phone: req.body.phone,
-//       })
-//       .eq("user_id", id);
-//     if (error) {
-//       throw error;
-//     }
-//     res.json({ message: "Updated user successfully", data });
-//   } catch (error) {
-//     console.error("Error updating user", error);
-//     res.status(500).send("API PUT ERROR");
-//   }
-// });
+userRouter.put("/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    const { data, error } = await supabase
+      .from("Users")
+      .update({
+        user_name: req.body.name,
+        birth_date: req.body.birth_date,
+        address: req.body.address,
+        phone: req.body.phone,
+      })
+      .eq("user_id", id);
+    if (error) {
+      throw error;
+    }
+    res.json({ message: "Updated user successfully", data });
+  } catch (error) {
+    console.error("Error updating user", error);
+    res.status(500).send("API PUT ERROR");
+  }
+});
 
 export default userRouter;
