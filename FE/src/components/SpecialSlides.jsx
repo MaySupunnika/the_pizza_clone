@@ -18,31 +18,31 @@ import { Pagination, Autoplay, FreeMode, Navigation } from "swiper/modules";
 
 export default function SpecialSlides() {
   const slides = [
-    { src: Homeone },
-    { src: Hometwo },
-    { src: Homethree },
-    { src: Homefour },
-    { src: Homefive },
-    { src: Homesix },
-    { src: Homeseven },
+    { src: Homeone, label: "special-menu-one" },
+    { src: Hometwo, label: "special-menu-two" },
+    { src: Homethree, label: "special-menu-three" },
+    { src: Homefour, label: "special-menu-four" },
+    { src: Homefive, label: "special-menu-five" },
+    { src: Homesix, label: "special-menu-six" },
+    { src: Homeseven, label: "special-menu-seven" },
   ];
-  console.log(slides);
+
   return (
     <>
       <Swiper
-        autoplay={{ delay: 2000, disableOnInteraction: false }}
+        autoplay={{ delay: 3500, disableOnInteraction: false }}
         pagination={{
           type: "progressbar",
         }}
         navigation={true}
         freeMode={true}
         modules={[Pagination, Navigation, Autoplay, FreeMode]}
-        className="mySwiper pt-[6rem]"
+        className="mySwiper pt-[6rem] w-screen"
       >
         {slides.map((card, index) => (
-          <SwiperSlide key={index}>
-            <div className="w-[100vw] h-[41.25rem]">
-              <img src={card.src} alt="special-pic" className="w-full" />
+          <SwiperSlide key={index} className="w-screen">
+            <div className="h-[40.9rem]">
+              <img src={card.src} alt={card.label} className="w-full h-full" />
             </div>
           </SwiperSlide>
         ))}
@@ -50,40 +50,3 @@ export default function SpecialSlides() {
     </>
   );
 }
-
-// import React, { useRef, useState } from "react";
-// // Import Swiper React components
-// import { Swiper, SwiperSlide } from "swiper/react";
-
-// // Import Swiper styles
-// import "swiper/css";
-// import "swiper/css/pagination";
-// import "swiper/css/navigation";
-
-// // import required modules
-// import { Pagination, Navigation } from "swiper/modules";
-
-// export default function App() {
-//   return (
-//     <>
-//       <Swiper
-//         pagination={{
-//           type: "progressbar",
-//         }}
-//         navigation={true}
-//         modules={[Pagination, Navigation]}
-//         className="mySwiper pt-[15rem]"
-//       >
-//         <SwiperSlide>Slide 1</SwiperSlide>
-//         <SwiperSlide>Slide 2</SwiperSlide>
-//         <SwiperSlide>Slide 3</SwiperSlide>
-//         <SwiperSlide>Slide 4</SwiperSlide>
-//         <SwiperSlide>Slide 5</SwiperSlide>
-//         <SwiperSlide>Slide 6</SwiperSlide>
-//         <SwiperSlide>Slide 7</SwiperSlide>
-//         <SwiperSlide>Slide 8</SwiperSlide>
-//         <SwiperSlide>Slide 9</SwiperSlide>
-//       </Swiper>
-//     </>
-//   );
-// }

@@ -11,6 +11,7 @@ export default {
         "blue-100": "#EAECF0",
         "blue-200": "#F9F9F9",
         "blue-300": "#DEE1E7",
+        "blue-400": "#F6F6F6",
         "gray-100": "#ECECEC",
         "soft-black": "#414142",
       },
