@@ -1,12 +1,12 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import CrunchyCheesy from "../assets/Cheesy-Max-1080x720_EN_1.webp";
-import Pan from "../assets/TPCnew_category_menu_pan.webp";
-import CrispyThin from "../assets/TPCnew_category_menu_crispythin.webp";
-import Extreme from "../assets/TPCnew_category_menu_extreme.webp";
-import NYMax from "../assets/NYMaxNPD_1080x720_EN.webp";
-import NYMega from "../assets/NY_12-eng.webp";
-import All from "../assets/dealofthemonth-v2.webp";
+import CrunchyCheesy from "../../assets/Cheesy-Max-1080x720_EN_1.webp";
+import Pan from "../../assets/TPCnew_category_menu_pan.webp";
+import CrispyThin from "../../assets/TPCnew_category_menu_crispythin.webp";
+import Extreme from "../../assets/TPCnew_category_menu_extreme.webp";
+import NYMax from "../../assets/NYMaxNPD_1080x720_EN.webp";
+import NYMega from "../../assets/NY_12-eng.webp";
+import All from "../../assets/dealofthemonth-v2.webp";
 
 export default function Pizza() {
   const { t } = useTranslation();

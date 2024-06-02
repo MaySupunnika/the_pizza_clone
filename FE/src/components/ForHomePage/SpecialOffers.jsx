@@ -1,9 +1,9 @@
 import React from "react";
-import ComboSet from "../assets/comboset.webp";
-import FamilyComboSet from "../assets/familycomboset.webp";
-import ExtremeComboSet from "../assets/extracomboset.webp";
-import SuperComboSet from "../assets/supercomboset.webp";
-import Deal from "../assets/special-deals.svg";
+import ComboSet from "../../assets/comboset.webp";
+import FamilyComboSet from "../../assets/familycomboset.webp";
+import ExtremeComboSet from "../../assets/extracomboset.webp";
+import SuperComboSet from "../../assets/supercomboset.webp";
+import Deal from "../../assets/special-deals.svg";
 import { useTranslation } from "react-i18next";
 
 import { Swiper, SwiperSlide } from "swiper/react";

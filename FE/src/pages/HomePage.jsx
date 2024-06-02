@@ -1,11 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import SpecialSlides from "../components/SpecialSlides";
+import SpecialSlides from "../components/ForHomePage/SpecialSlides";
 import Navbar from "../components/Navbar";
-import MyCart from "../components/MyCart";
-import PromotionOfMonth from "../components/PromotionOfMonth";
-import SpecialOffers from "../components/SpecialOffers";
-
+import MyCart from "../components/ForHomePage/MyCart";
+import PromotionOfMonth from "../components/ForHomePage/PromotionOfMonth";
+import SpecialOffers from "../components/ForHomePage/SpecialOffers";
+import Menu from "../components/ForHomePage/Menu";
+import Footer from "../components/Footer";
 export default function HomePage() {
   // const navigate = useNavigate();
   return (
@@ -15,6 +16,8 @@ export default function HomePage() {
       <MyCart />
       <PromotionOfMonth />
       <SpecialOffers />
+      <Menu />
+      <Footer />
     </div>
   );
 }

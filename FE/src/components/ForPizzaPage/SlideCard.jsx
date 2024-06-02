@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import PizzaImg from "../assets/pizza-v3.webp";
-import PizzaPuff from "../assets/Cheesy_Square_210x232.webp";
-import SpecialDeal from "../assets/SpecialDeals.webp";
-import ValueSet from "../assets/ValuSet.webp";
-import Appetizer from "../assets/Appetizer_210x232.webp";
-import Chicken from "../assets/card_Chicken.webp";
-import Pasta from "../assets/card_Pasta.webp";
-import Salad from "../assets/card_Salad.webp";
-import Drinks from "../assets/card_Desserts.webp";
+import PizzaImg from "../../assets/pizza-v3.webp";
+import PizzaPuff from "../../assets/Cheesy_Square_210x232.webp";
+import SpecialDeal from "../../assets/SpecialDeals.webp";
+import ValueSet from "../../assets/ValuSet.webp";
+import Appetizer from "../../assets/Appetizer_210x232.webp";
+import Chicken from "../../assets/card_Chicken.webp";
+import Pasta from "../../assets/card_Pasta.webp";
+import Salad from "../../assets/card_Salad.webp";
+import Drinks from "../../assets/card_Desserts.webp";
 import { useTranslation } from "react-i18next";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,7 +17,7 @@ import "swiper/css/navigation";
 
 import { Pagination, Autoplay, FreeMode } from "swiper/modules";
 
-import "../css/SlideCard.css";
+import "../../css/SlideCard.css";
 
 export default function SlideCard() {
   const { t } = useTranslation();

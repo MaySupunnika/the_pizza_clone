@@ -1,5 +1,5 @@
 import React from "react";
-import CartIcon from "../assets/cart-plus.svg";
+import CartIcon from "../../assets/cart-plus.svg";
 import { useTranslation } from "react-i18next";
 
 export default function cart() {

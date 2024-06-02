@@ -1,18 +1,18 @@
 import React from "react";
-import Homeone from "../assets/homeone.jpg";
-import Hometwo from "../assets/hometwo.jpg";
-import Homethree from "../assets/homethree.jpg";
-import Homefour from "../assets/homefour.jpg";
-import Homefive from "../assets/homefive.jpg";
-import Homesix from "../assets/homesix.jpg";
-import Homeseven from "../assets/homeseven.jpg";
+import Homeone from "../../assets/homeone.jpg";
+import Hometwo from "../../assets/hometwo.jpg";
+import Homethree from "../../assets/homethree.jpg";
+import Homefour from "../../assets/homefour.jpg";
+import Homefive from "../../assets/homefive.jpg";
+import Homesix from "../../assets/homesix.jpg";
+import Homeseven from "../../assets/homeseven.jpg";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-import "../css/SpecialSlides.css";
+import "../../css/SpecialSlides.css";
 
 import { Pagination, Autoplay, FreeMode, Navigation } from "swiper/modules";
 

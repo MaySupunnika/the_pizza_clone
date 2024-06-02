@@ -9,8 +9,10 @@ import PCI from "../assets/logo-pci-white.svg";
 import AppStore from "../assets/AppStore-footer.svg";
 import GooglePlay from "../assets/GooglePlay-footer.svg";
 import Phone from "../assets/phone-solid-240.png";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
   return (
     <div className="h-[16.3rem]  bg-gray flex flex-col mt-[3rem] relative z-20">
       <div className="flex mx-auto mt-[2rem] mb-7">
@@ -25,17 +27,17 @@ export default function Footer() {
         </h4>
       </div>
       <div className="flex text-soft-gray gap-x-9 font-semibold mx-auto text-lg">
-        <p className="cursor-pointer">About Us</p>
-        <p className="cursor-pointer">Contact Us</p>
-        <p className="cursor-pointer">Track Your Order</p>
-        <p className="cursor-pointer">Find Store</p>
-        <p className="cursor-pointer">Privacy Statement</p>
+        <p className="cursor-pointer">{t("about us")}</p>
+        <p className="cursor-pointer">{t("contact us")}</p>
+        <p className="cursor-pointer">{t("track your orders")}</p>
+        <p className="cursor-pointer">{t("find stores")}</p>
+        <p className="cursor-pointer">{t("privacy statement")}</p>
       </div>
       <div className="w-[80rem] h-[1px] bg-soft-gray mx-auto mt-5"></div>
       <div className="flex mx-auto mt-6">
         <div className="w-[12rem] flex items-center">
-          <p className="text-soft-gray font-semibold text-lg w-[70%]">
-            Follow us:
+          <p className="text-soft-gray font-semibold text-lg w-[73%]">
+            {t("follow us")}:
           </p>
           <div className="w-[4rem] cursor-pointer">
             <img src={FB} alt="facebook" />

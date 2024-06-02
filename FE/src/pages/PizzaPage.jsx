@@ -1,8 +1,8 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import SlideCard from "../components/SlideCard";
-import Cart from "../components/Cart";
-import Pizza from "../components/Pizza";
+import SlideCard from "../components/ForPizzaPage/SlideCard";
+import Cart from "../components/ForPizzaPage/Cart";
+import Pizza from "../components/ForPizzaPage/Pizza";
 import Footer from "../components/Footer";
 
 export default function PizzaPage() {
