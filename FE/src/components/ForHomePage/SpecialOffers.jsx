@@ -32,7 +32,9 @@ export default function SpecialOffers() {
             {t("special offers")}
           </p>
         </div>
-        <p className="text-green text-sm mt-1 ml-[62rem]">{t("see all")}</p>
+        <p className="text-green text-sm mt-1 ml-[62rem] cursor-pointer">
+          {t("see all")}
+        </p>
       </div>
       <Swiper
         slidesPerView={3}
@@ -43,7 +45,7 @@ export default function SpecialOffers() {
         className="mySwiper flex justify-center items-center w-[80rem] h-[18rem]"
       >
         {comboset.map((combo, index) => (
-          <SwiperSlide key={index}>
+          <SwiperSlide key={index} className="cursor-pointer">
             <div className="w-[25rem]">
               <img
                 src={combo.src}

@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
-import { ToggleContext } from "../contexts/toggleContext";
+import { DataContext } from "../contexts/dataContext";
 import "boxicons";
 import { useTranslation } from "react-i18next";
 
 export default function SwitchToggle() {
   const { t } = useTranslation();
-  const { selected, setSelected } = useContext(ToggleContext);
+  const { selected, setSelected } = useContext(DataContext);
   return (
     <div className="w-[18rem] h-[2.7rem] bg-blue-200 border border-blue-100 rounded-xl ml-7 flex justify-between items-center">
       <button

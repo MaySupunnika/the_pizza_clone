@@ -1,13 +1,13 @@
 import React, { useContext, useState } from "react";
 import LocationIcon from "../assets/maps-and-flags.png";
-import { ToggleContext } from "../contexts/toggleContext";
+import { DataContext } from "../contexts/dataContext";
 import { useTranslation } from "react-i18next";
 import ArrowDown from "../assets/down-arrow.png";
 import ArrowUp from "../assets/up-arrow.png";
 
 export default function LocationDropDown() {
   const { t } = useTranslation();
-  const { selected, setSelected } = useContext(ToggleContext);
+  const { selected, setSelected } = useContext(DataContext);
   const [clickDropDown, setClickDropDown] = useState(false);
 
   const handleDropDown = () => {

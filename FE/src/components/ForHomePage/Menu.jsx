@@ -9,13 +9,19 @@ import menuFive from "../../assets/card_Chicken.webp";
 import menuSix from "../../assets/card_Pasta.webp";
 import menuSeven from "../../assets/card_Salad.webp";
 import menuEight from "../../assets/card_Desserts.webp";
+import { useNavigate } from "react-router-dom";
 
 export default function Menu() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
 
   const menu = [
-    { src: menuOne, label: t("pizza") },
-    { src: menuTwo, label: t("cheesy puff & square pizza") },
+    { src: menuOne, label: t("pizza"), path: "/pizza" },
+    { src: menuTwo, label: t("cheesy puff & square pizza"), path: "/puff" },
     { src: menuThree, label: t("value set") },
     { src: menuFour, label: t("appetizer") },
     { src: menuFive, label: t("chicken") },
@@ -35,7 +41,11 @@ export default function Menu() {
       </div>
       <div className="w-[77rem] h-[29rem] grid grid-cols-6 gap-x-5 mx-auto">
         {menu.map((item, index) => (
-          <div className="w-[11rem] relative" key={index}>
+          <div
+            className="w-[11rem] relative cursor-pointer"
+            key={index}
+            onClick={() => handleNavigation(item.path)}
+          >
             <img
               src={item.src}
               alt={item.label}
