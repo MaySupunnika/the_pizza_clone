@@ -18,6 +18,7 @@ export default {
       dropShadow: {
         set: "0 6px 6px rgba(0, 0, 0, 0.08)",
         langbox: "0 0 6px rgba(0, 0, 0, 0.08)",
+        "inner-custom": "inset 0 2px 4px 0 rgba(255, 255, 255, 0.6)",
       },
       fontFamily: { Poppins: ["Poppins"] },
     },

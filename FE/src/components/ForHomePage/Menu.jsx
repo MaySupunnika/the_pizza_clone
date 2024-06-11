@@ -22,12 +22,16 @@ export default function Menu() {
   const menu = [
     { src: menuOne, label: t("pizza"), path: "/pizza" },
     { src: menuTwo, label: t("cheesy puff & square pizza"), path: "/puff" },
-    { src: menuThree, label: t("value set") },
-    { src: menuFour, label: t("appetizer") },
-    { src: menuFive, label: t("chicken") },
-    { src: menuSix, label: t("pasta") },
-    { src: menuSeven, label: t("salad & steak") },
-    { src: menuEight, label: t("drinks & desserts") },
+    { src: menuThree, label: t("value set"), path: "/value-set" },
+    { src: menuFour, label: t("appetizer"), path: "/appetizers" },
+    { src: menuFive, label: t("chicken"), path: "/chicken" },
+    { src: menuSix, label: t("pasta"), path: "/pasta" },
+    { src: menuSeven, label: t("salad & steak"), path: "/salad" },
+    {
+      src: menuEight,
+      label: t("drinks & desserts"),
+      path: "/drinks-and-desserts",
+    },
   ];
   return (
     <div className="flex flex-col">

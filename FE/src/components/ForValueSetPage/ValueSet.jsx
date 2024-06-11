@@ -103,7 +103,7 @@ export default function ValueSet() {
       <div className="grid grid-cols-2 gap-7 mt-3">
         {cards.map((card, index) => (
           <div
-            className="w-[100%] h-[36rem] border border-blue-100 rounded-xl cursor-pointer hover:shadow-xl"
+            className="w-[100%] h-[36rem] border border-blue-200 rounded-xl cursor-pointer hover:shadow-xl"
             key={index}
           >
             <div className="w-[100%] h-[auto]">

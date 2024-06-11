@@ -38,11 +38,11 @@ export default function SlideCard() {
     { src: PizzaPuff, label: t("cheesy puff & square pizza"), path: "/puff" },
     { src: SpecialDeal, label: t("special deals") },
     { src: ValueSet, label: t("value set"), path: "/value-set" },
-    { src: Appetizer, label: t("appetizer") },
-    { src: Chicken, label: t("chicken") },
-    { src: Pasta, label: t("pasta") },
-    { src: Salad, label: t("salad & steak") },
-    { src: Drinks, label: t("drinks & desserts") },
+    { src: Appetizer, label: t("appetizer"), path: "/appetizers" },
+    { src: Chicken, label: t("chicken"), path: "/chicken" },
+    { src: Pasta, label: t("pasta"), path: "/pasta" },
+    { src: Salad, label: t("salad & steak"), path: "/salad" },
+    { src: Drinks, label: t("drinks & desserts"), path: "drinks-and-desserts" },
   ];
 
   return (

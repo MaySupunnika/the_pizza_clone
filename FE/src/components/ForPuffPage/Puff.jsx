@@ -77,7 +77,7 @@ export default function Puff() {
       <div className="grid grid-cols-2 gap-y-8 gap-x-8 mt-7">
         {puff.map((item, index) => (
           <div
-            className="w-[100%] h-[38rem] rounded-xl border border-blue-100 flex flex-col cursor-pointer hover:shadow-xl pb-5"
+            className="w-[100%] h-[38rem] rounded-xl border border-blue-200 flex flex-col cursor-pointer hover:shadow-xl pb-5"
             key={index}
           >
             <div className="w-[100%] h-[50%] ">

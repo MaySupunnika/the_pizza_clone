@@ -8,6 +8,8 @@ import Pizza from "../components/ForPizzaPage/Pizza";
 import Puff from "../components/ForPuffPage/Puff";
 import PuffById from "../components/ForPuffPage/PuffById";
 import ValueSet from "../components/ForValueSetPage/ValueSet";
+import Appetizer from "../components/ForAppetizerPage/Appetizer";
+import Chicken from "../components/ForChickenPage/chicken";
 
 export default function ChangePage() {
   return (
@@ -21,6 +23,8 @@ export default function ChangePage() {
             <Route path="/puff" element={<Puff />} />
             <Route path="/puff/:id" element={<PuffById />} />
             <Route path="/value-set" element={<ValueSet />} />
+            <Route path="/appetizers" element={<Appetizer />} />
+            <Route path="/chicken" element={<Chicken />} />
           </Routes>
         </div>
         <Cart />
