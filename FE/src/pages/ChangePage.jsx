@@ -11,6 +11,9 @@ import ValueSet from "../components/ForValueSetPage/ValueSet";
 import Appetizer from "../components/ForAppetizerPage/Appetizer";
 import Chicken from "../components/ForChickenPage/Chickens.jsx";
 import Pasta from "../components/ForPastaPage/Pasta.jsx";
+import Salad from "../components/ForSaladPage/Salad.jsx";
+import Drink from "../components/ForDrinkPage/Drinks.jsx";
+import Drinks from "../components/ForDrinkPage/Drinks.jsx";
 
 export default function ChangePage() {
   return (
@@ -27,6 +30,8 @@ export default function ChangePage() {
             <Route path="/appetizers" element={<Appetizer />} />
             <Route path="/chicken" element={<Chicken />} />
             <Route path="/pasta" element={<Pasta />} />
+            <Route path="/salad" element={<Salad />} />
+            <Route path="/drinks-and-desserts" element={<Drinks />} />
           </Routes>
         </div>
         <Cart />

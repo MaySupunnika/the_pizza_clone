@@ -1,27 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
+import saladA from "../../assets/saladA.webp";
+import saladB from "../../assets/saladB.webp";
+import saladC from "../../assets/saladC.webp";
+import saladD from "../../assets/saladD.webp";
+import saladE from "../../assets/saladE.webp";
+import saladF from "../../assets/saladF.webp";
 import { useTranslation } from "react-i18next";
-import pastaA from "../../assets/pastaA.webp";
-import pastaB from "../../assets/pastaB.webp";
-import pastaC from "../../assets/pastaC.webp";
-import pastaD from "../../assets/pastaD.webp";
-import pastaE from "../../assets/pastaE.webp";
-import pastaF from "../../assets/pastaF.webp";
-import pastaG from "../../assets/pastaG.webp";
-import pastaH from "../../assets/pastaH.webp";
-import pastaI from "../../assets/pastaI.webp";
-import pastaJ from "../../assets/pastaJ.webp";
-import pastaK from "../../assets/pastaK.webp";
-import pastaL from "../../assets/pastaL.webp";
 
-export default function Pasta() {
+export default function Salad() {
   const { t } = useTranslation();
 
-  const [clickPasta, setClickPasta] = useState(null);
+  const [clickSalad, setClickSalad] = useState(null);
   const clickedRef = useRef([]);
   const [quantity, setQuantity] = useState({});
 
-  const handleClickPasta = (index) => {
-    setClickPasta(index === clickPasta ? null : index);
+  const handleClickSalad = (index) => {
+    setClickSalad(index === clickSalad ? null : index);
   };
 
   const handleChangeQuantity = (e, index) => {
@@ -34,60 +28,38 @@ export default function Pasta() {
       if (
         clickedRef.current.every((ref) => ref && !ref.contains(event.target))
       ) {
-        setClickPasta(null);
+        setClickSalad(null);
       }
     };
     document.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [clickPasta]);
+  }, [clickSalad]);
 
-  const pastas = [
-    { src: pastaA, label: t("Stir Fried Macaroni Ham and Omelet"), price: 129 },
+  const salads = [
     {
-      src: pastaB,
-      label: t("Stir Fried Macaroni Chicken and Omelet"),
-      price: 129,
+      src: saladA,
+      label: t("Signature BBQ Grilled Chicken with Garlic Bread"),
+      price: 149,
     },
-    {
-      src: pastaC,
-      label: t("Stir Fried Macaroni Chicken Sausage"),
-      price: 109,
-    },
-    {
-      src: pastaD,
-      label: t("Baked Macaroni and Cheese with Truffle and Ham"),
-      price: 139,
-    },
-    {
-      src: pastaE,
-      label: t("Ham & Mushroom Spaghetti in Alfredo Sauce"),
-      price: 129,
-    },
-    { src: pastaF, label: t("Spaghetti Keemao Sausage"), price: 129 },
-    { src: pastaG, label: t("Spicy Sausage Spaghetti"), price: 129 },
-    { src: pastaH, label: t("Spaghetti Carbonara"), price: 139 },
-    { src: pastaI, label: t("Spicy Bacon Spaghetti"), price: 139 },
-    { src: pastaJ, label: t("Spaghetti Kheemao Seafood"), price: 169 },
-    {
-      src: pastaK,
-      label: t("Baked Macaroni & Cheese with BBQ Chicken"),
-      price: 129,
-    },
-    { src: pastaL, label: t("Baked Macaroni & Cheese with Bacon"), price: 139 },
+    { src: saladB, label: t("Pork Chop Steak with Garlic Bread"), price: 219 },
+    { src: saladC, label: t("Caesar Salad"), price: 99 },
+    { src: saladD, label: t("Garden Salad with Salad Cream"), price: 99 },
+    { src: saladE, label: t("Caesar Salad Dressing"), price: 10 },
+    { src: saladF, label: t("Original Salad Cream"), price: 10 },
   ];
   return (
     <div className="w-[55rem] mt-5">
-      <h1 className="text-green text-5xl font-bold">{t("select pasta")}</h1>
+      <h1 className="text-green text-5xl font-bold">{t("select salad")}</h1>
       <div className="grid grid-cols-3 gap-y-5 mt-7 gap-x-9 mb-5">
-        {pastas.map((item, index) => (
+        {salads.map((item, index) => (
           <div
             className="relative w-[18rem] h-[19rem] rounded-xl border border-blue-100 hover:shadow-lg "
             key={index}
             onClick={(e) => {
               e.stopPropagation();
-              handleClickPasta(index);
+              handleClickSalad(index);
             }}
             ref={(el) => (clickedRef.current[index] = el)}
           >
@@ -96,7 +68,7 @@ export default function Pasta() {
             <h4 className="text-grey font-semibold text-xl pl-3 mt-1">
               {item.label}
             </h4>
-            {clickPasta === index && (
+            {clickSalad === index && (
               <div
                 className="flex items-end h-[100%] w-[100%] absolute top-0 bg-gradient-to-t from-white"
                 onClick={(e) => e.stopPropagation()}

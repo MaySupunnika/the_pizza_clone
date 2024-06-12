@@ -25,7 +25,10 @@ export default function Navbar() {
           <p className=" text-green text-xs font-semibold">{t("Reward")}</p>
         </div>
         <SwitchLang />
-        <div className="w-[15rem] h-[2.7rem] flex justify-center items-center border border-green rounded-lg font-bold text-lg text-green hover:text-white hover:bg-soft-green cursor-pointer">
+        <div
+          className="w-[15rem] h-[2.7rem] flex justify-center items-center border border-green rounded-lg font-bold text-lg text-green hover:text-white hover:bg-soft-green cursor-pointer"
+          onClick={() => navigate("/login")}
+        >
           {t("Sign in / Sign up")}
         </div>
       </div>
