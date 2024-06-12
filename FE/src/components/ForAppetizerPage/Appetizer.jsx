@@ -92,7 +92,7 @@ export default function Appetizer() {
             </h3>
             {clickAppetizer === index && (
               <div
-                className="flex items-end h-[100%] w-[100%] absolute top-0"
+                className="flex items-end h-[100%] w-[100%] absolute top-0 bg-gradient-to-t from-white"
                 onClick={(e) => e.stopPropagation()}
               >
                 <input

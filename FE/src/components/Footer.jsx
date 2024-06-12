@@ -14,7 +14,10 @@ import { useTranslation } from "react-i18next";
 export default function Footer() {
   const { t } = useTranslation();
   return (
-    <div className="h-[16.3rem]  bg-gray flex flex-col mt-[3rem] relative z-20">
+    <div
+      id="footer"
+      className="h-[16.3rem]  bg-gray flex flex-col mt-[3rem] relative z-20"
+    >
       <div className="flex mx-auto mt-[2rem] mb-7">
         <div className="w-[4rem] mr-5 cursor-pointer">
           <img src={Logo} alt="logo" />

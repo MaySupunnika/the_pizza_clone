@@ -9,7 +9,8 @@ import Puff from "../components/ForPuffPage/Puff";
 import PuffById from "../components/ForPuffPage/PuffById";
 import ValueSet from "../components/ForValueSetPage/ValueSet";
 import Appetizer from "../components/ForAppetizerPage/Appetizer";
-import Chicken from "../components/ForChickenPage/chicken";
+import Chicken from "../components/ForChickenPage/Chickens.jsx";
+import Pasta from "../components/ForPastaPage/Pasta.jsx";
 
 export default function ChangePage() {
   return (
@@ -25,6 +26,7 @@ export default function ChangePage() {
             <Route path="/value-set" element={<ValueSet />} />
             <Route path="/appetizers" element={<Appetizer />} />
             <Route path="/chicken" element={<Chicken />} />
+            <Route path="/pasta" element={<Pasta />} />
           </Routes>
         </div>
         <Cart />
