@@ -7,7 +7,7 @@ import view from "../assets/view.png";
 import hide from "../assets/hide.png";
 import { useNavigate } from "react-router-dom";
 import MyCart from "../components/ForHomePage/MyCart";
-import "boxicons";
+import FBicon from "../assets/facebook-circle-logo-240.png";
 
 export default function LoginPage() {
   const { t } = useTranslation();
@@ -22,10 +22,10 @@ export default function LoginPage() {
     <>
       <Navbar />
       <MyCart />
-      <div className="bg-[#F2F4F7] h-screen flex mb-[-3rem]">
+      <div className="bg-[#F2F4F7] min-h-screen flex mb-[-3rem]">
         <div className="w-[83%] flex justify-center">
-          <div className="w-[90%] mt-[8rem]">
-            <div className="flex flex-col w-[45%] ml-[25rem]">
+          <div className="w-[100%] mt-[8rem]">
+            <div className="flex flex-col w-[47%] ml-[25rem]">
               <div className="flex justify-between items-center">
                 <p
                   className="text-gray font-semibold text-medium cursor-pointer"
@@ -90,11 +90,11 @@ export default function LoginPage() {
                   </p>
                   <div className="relative">
                     <div className="absolute top-[22%] left-[23%]">
-                      <box-icon
-                        name="facebook-circle"
-                        type="logo"
-                        color="#ffffff"
-                      ></box-icon>
+                      <img
+                        src={FBicon}
+                        alt="facebook-icon"
+                        className="w-[1.5rem]"
+                      />
                     </div>
                     <button className="bg-[#1877F2] w-[100%] rounded-xl text-white text-base py-3 pl-8">
                       {t("sign in with facebook")}
@@ -108,7 +108,7 @@ export default function LoginPage() {
             <img
               src={LoginImg}
               alt="lopgin-img"
-              className="h-screen object-cover"
+              className="min-h-[71rem] object-cover"
             />
           </div>
         </div>
