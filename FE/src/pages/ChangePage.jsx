@@ -12,7 +12,6 @@ import Appetizer from "../components/ForAppetizerPage/Appetizer";
 import Chicken from "../components/ForChickenPage/Chickens.jsx";
 import Pasta from "../components/ForPastaPage/Pasta.jsx";
 import Salad from "../components/ForSaladPage/Salad.jsx";
-import Drink from "../components/ForDrinkPage/Drinks.jsx";
 import Drinks from "../components/ForDrinkPage/Drinks.jsx";
 
 export default function ChangePage() {
