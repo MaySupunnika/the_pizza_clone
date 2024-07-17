@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import LoginImg from "../assets/login-banner.webp";
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import MyCart from "../components/ForHomePage/MyCart";
 import FBicon from "../assets/facebook-circle-logo-240.png";
 import ErrorIcon from "../assets/error-icon.png";
+import { useAuth } from "../contexts/authentication";
 
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -16,6 +17,7 @@ import * as Yup from "yup";
 export default function LoginPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -36,8 +38,9 @@ export default function LoginPage() {
   });
   const handleSubmit = async (values, { setErrors }) => {
     try {
-      await AuthenticatorAssertionResponse.login(values);
-      setErrors(auth.Session.error);
+      await auth.login(values);
+      setErrors(auth.session.error);
+      navigate("/");
     } catch (error) {
       console.log(error);
       navigate("/login");
@@ -65,7 +68,7 @@ export default function LoginPage() {
                   </p>
                   <button
                     className="text-medium bg-white border border-green rounded-lg px-3 py-2 ml-2 text-green font-semibold hover:bg-green hover:text-white"
-                    onClick={() => navigate("/signup")}
+                    onClick={() => navigate("/register")}
                   >
                     {t("sign up")}
                   </button>
@@ -82,9 +85,9 @@ export default function LoginPage() {
                 >
                   {({ errors, touched }) => (
                     <Form>
-                      <labe htmlFor="email" className="text-xs font-medium">
+                      <label htmlFor="email" className="text-xs font-medium">
                         {t("email")} <span className="text-red-700">*</span>
-                      </labe>
+                      </label>
                       <div className="relative">
                         <Field
                           type="email"

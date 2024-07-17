@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useTranslation } from "react-i18next";
@@ -6,52 +6,142 @@ import SignupImg from "../assets/register-banner.webp";
 import MyCart from "../components/ForHomePage/MyCart";
 import { useNavigate } from "react-router-dom";
 import FBicon from "../assets/facebook-circle-logo-240.png";
-import DatePicker from "../components/ForRegisterPage/DatePicker";
-import CalendarIcon from "../assets/calendar.png";
 import view from "../assets/view.png";
 import hide from "../assets/hide.png";
-import RadioGender from "../components/ForRegisterPage/GenderRadio";
 import Checkbox from "@mui/material/Checkbox";
 import ErrorIcon from "../assets/error-icon.png";
 
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { useAuth } from "../contexts/authentication";
+
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import dayjs from "dayjs";
+import { Stack } from "@mui/material";
+
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
+import Radio from "@mui/joy/Radio";
+import RadioGroup from "@mui/joy/RadioGroup";
 
 export default function RegisterPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const [clickSignupEmail, setClickSignupEmail] = useState(false);
-  const [clickCalendar, setClickCalendar] = useState(false);
-  const calendarRef = useRef(null);
-  const [selectDOB, setSelectDOB] = useState("");
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [isSelectGender, setIsSelectGender] = useState(" ");
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+
+  const [firstNameError, setFirstNameError] = useState(null);
+  const [lastNameError, setLastNameError] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [dobError, setDOBError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
+  const [confirmPasswordError, setConfirmPasswordError] = useState(null);
+  const [phoneNumberError, setPhoneNumberError] = useState(null);
+  const [genderError, setGenderError] = useState(null);
+  const [checkboxError, setCheckboxError] = useState(null);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPW, setShowConfirmPW] = useState(false);
 
-  const [checkboxError, setCheckboxError] = useState(null);
-  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
-        setClickCalendar(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleCalendar = () => {
-    setClickCalendar(!clickCalendar);
+  const validateFirstName = (fName) => {
+    if (!fName) {
+      setFirstNameError("Required");
+    } else if (!/^[A-Za-zก-ฮ0-9]+$/.test(fName)) {
+      setFirstNameError("First name can only contain A-Z,a-z,ก-ฮ and 0-9");
+    } else {
+      setFirstNameError(null);
+    }
   };
 
-  const handleDateChange = (date) => {
-    setSelectDOB(date.format("DD / MM / YYYY"));
-    setClickCalendar(false);
+  const validateLastName = (lName) => {
+    if (!lName) {
+      setLastNameError("Required");
+    } else if (!/^[A-Za-zก-ฮ0-9]+$/.test(lName)) {
+      setLastNameError("Last name can only contain A-Z,a-z,ก-ฮ and 0-9");
+    } else {
+      setLastNameError(null);
+    }
+  };
+
+  const validateBirthDate = (birthDate) => {
+    if (!birthDate) {
+      setDOBError("Required");
+    } else if (new Date(birthDate) > new Date()) {
+      setDOBError("Birthdate cannot be in the future.");
+    } else {
+      setDOBError(null);
+    }
+  };
+
+  const validateEmail = (value) => {
+    if (!value) {
+      setEmailError("Required");
+    } else if (!/\S+@\S+\.\S+/.test(value)) {
+      setEmailError("Invalid email address");
+    } else {
+      setEmailError(null);
+    }
+  };
+
+  const validatePassword = (value) => {
+    if (!value) {
+      setPasswordError("Required");
+    } else if (value.length < 8) {
+      setPasswordError("Password must be at least 8 characters long");
+    } else if (!/^[A-Za-z0-9]+$/.test(value)) {
+      setPasswordError("Invalid characters");
+    } else {
+      setPasswordError(null);
+    }
+  };
+
+  const validateConfirmPassword = (value) => {
+    if (!value) {
+      setConfirmPasswordError("Required");
+    } else if (value !== password) {
+      setConfirmPasswordError("Password do not match");
+    } else {
+      setConfirmPasswordError(null);
+    }
+  };
+
+  const validatePhoneNumber = (value) => {
+    if (!value) {
+      setPhoneNumberError("Required");
+    } else if (!/^0\d{9}$/.test(value)) {
+      setPhoneNumberError("Phone number must be 10 digits and start with 0");
+    } else {
+      setPhoneNumberError(null);
+    }
+  };
+
+  const handleCheckboxChange = (event) => {
+    setIsCheckboxChecked(event.target.checked);
+    if (event.target.checked) {
+      setCheckboxError(null);
+    } else {
+      setCheckboxError("Required");
+    }
+  };
+
+  const handleRadioGender = (event) => {
+    setIsSelectGender(event.target.value);
+    if (event.target.value) {
+      setGenderError(null);
+    } else {
+      setGenderError("Required");
+    }
   };
 
   const togglePassword = () => {
@@ -74,55 +164,33 @@ export default function RegisterPage() {
     }
   };
 
-  const initialValues = {
-    firstName: "",
-    lastName: "",
-    dob: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    phoneNumber: "",
-    gender: "",
-  };
-
-  const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required("required"),
-    lastName: Yup.string().required("required"),
-    dob: Yup.string()
-      .required("required")
-      .max(new Date(), "DOB cannot be in the future"),
-    email: Yup.string().email("Invalid email").required("required"),
-    password: Yup.string()
-      .required("required")
-      .min(8, "Password must be at least 8 characters"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Passwords must match")
-      .required("required"),
-    phoneNumber: Yup.string()
-      .matches(/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/, "Phone number is not valid")
-      .required("required"),
-    gender: Yup.string().required("required"),
-  });
-
-  const handleCheckboxChange = (event) => {
-    setIsCheckboxChecked(event.target.checked);
-    if (event.target.checked) {
-      setCheckboxError("");
-    } else {
-      setCheckboxError("requied");
+  const handleSubmit = async () => {
+    if (
+      !firstNameError &&
+      !lastNameError &&
+      !emailError &&
+      !dobError &&
+      !passwordError &&
+      !phoneNumberError &&
+      !genderError
+    ) {
+      const dataRegister = await auth.register({
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        birth_date: birthDate,
+        password,
+        phone: phoneNumber,
+        gender: isSelectGender,
+      });
+      if (dataRegister) {
+        navigate("/login");
+      } else {
+        console.log("Register failed");
+      }
     }
   };
 
-  const handleSubmit = (values) => {
-    if (!isCheckboxChecked) {
-      setCheckboxError("You must agree to receive information.");
-
-      return;
-    }
-
-    console.log("Your information:", values);
-    navigate("/login");
-  };
   return (
     <>
       <Navbar />
@@ -155,305 +223,372 @@ export default function RegisterPage() {
                   <h3 className="text-gray font-semibold text-[1.7rem] w-[20rem] mt-9">
                     {t("sign up for exclusive delivery deals!")}
                   </h3>
-                  <Formik
-                    initialValues={initialValues}
-                    validationSchema={validationSchema}
-                    onSubmit={handleSubmit}
-                  >
-                    {({ errors, touched }) => (
-                      <Form>
-                        <div className="grid grid-cols-2 gap-x-3 gap-y-3 mt-5">
-                          <div className="flex flex-col relative">
-                            <label
-                              className="text-xs font-medium"
-                              htmlFor="firstName"
-                            >
-                              {t("first name")}{" "}
-                              <span className="text-red-500">*</span>
-                            </label>
-                            <Field
-                              type="text"
-                              name="firstName"
-                              placeholder={t("first name")}
-                              className={`my-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none
-                                ${
-                                  errors.firstName && touched.firstName
-                                    ? "border-red-700"
-                                    : ""
-                                }`}
-                            />
-                            {errors.firstName && touched.firstName && (
-                              <div className="absolute top-9 right-2 w-[1.3rem]">
-                                <img src={ErrorIcon} alt="error-icon" />
-                              </div>
-                            )}
-                            <ErrorMessage
-                              name="firstName"
-                              component="div"
-                              className="text-red-700 text-xs font-semibold absolute top-0 left-[4.7rem]"
-                            />
-                          </div>
-                          <div className="flex flex-col relative">
-                            <label
-                              className="text-xs font-medium"
-                              htmlFor="lastName"
-                            >
-                              {t("last name")}{" "}
-                              <span className="text-red-500 "> *</span>
-                            </label>
-                            <Field
-                              name="lastName"
-                              type="text"
-                              placeholder={t("last name")}
-                              className={`my-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none
-                                ${
-                                  errors.lastName && touched.lastName
-                                    ? "border-red-700"
-                                    : ""
-                                }`}
-                            />
-                            {errors.lastName && touched.lastName && (
-                              <div className="absolute top-9 right-2 w-[1.3rem]">
-                                <img src={ErrorIcon} alt="error-icon" />
-                              </div>
-                            )}
-                            <ErrorMessage
-                              name="lastName"
-                              component="div"
-                              className="text-red-700 text-xs font-semibold absolute top-0 left-[4.7rem]"
-                            />
-                          </div>
-                          <div
-                            className="flex flex-col relative"
-                            onClick={handleCalendar}
+
+                  <form onSubmit={handleSubmit}>
+                    <div className="grid grid-cols-2 gap-x-3 gap-y-3 mt-5">
+                      <div className="flex flex-col relative">
+                        <label
+                          className="text-xs font-medium"
+                          htmlFor="firstName"
+                        >
+                          {t("first name")}{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          placeholder={t("first name")}
+                          value={firstName}
+                          onChange={(e) => {
+                            setFirstName(e.target.value);
+                            validateFirstName(e.target.value);
+                          }}
+                          onBlur={(e) => validateFirstName(e.target.value)}
+                          className={`my-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none
+                                ${firstNameError ? "border-red-700" : ""}`}
+                        />
+                        {firstNameError && (
+                          <>
+                            <div className="absolute top-9 right-2 w-[1.3rem]">
+                              <img src={ErrorIcon} alt="error-icon" />
+                            </div>
+                            <div className="text-red-700 text-xs font-semibold absolute top-0 left-[4.7rem]">
+                              {firstNameError}
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <div className="flex flex-col relative">
+                        <label
+                          className="text-xs font-medium"
+                          htmlFor="lastName"
+                        >
+                          {t("last name")}{" "}
+                          <span className="text-red-500 "> *</span>
+                        </label>
+                        <input
+                          type="text"
+                          placeholder={t("last name")}
+                          value={lastName}
+                          onChange={(e) => {
+                            setLastName(e.target.value);
+                            validateLastName(e.target.value);
+                          }}
+                          onBlur={(e) => validateLastName(e.target.value)}
+                          className={`my-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none
+                                ${lastNameError ? "border-red-700" : ""}`}
+                        />
+                        {lastNameError && (
+                          <>
+                            <div className="absolute top-9 right-2 w-[1.3rem]">
+                              <img src={ErrorIcon} alt="error-icon" />
+                            </div>
+                            <div className="text-red-700 text-xs font-semibold absolute top-0 left-[4.7rem]">
+                              {lastNameError}
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <div className="flex flex-col mt-[0.65rem] relative">
+                        <label
+                          htmlFor="birthDate"
+                          className="text-xs font-medium mb-[0.38rem]"
+                        >
+                          Birth Date
+                          <span className="text-red-500"> *</span>
+                        </label>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <Stack
+                            sx={{
+                              "& .MuiOutlinedInput-root": {
+                                "& fieldset": {
+                                  borderColor: dobError
+                                    ? "rgb(185 28 28) !important"
+                                    : "rgb(152 162 179) !important",
+                                  borderWidth: "1px !important",
+                                  borderRadius: "8px !important",
+                                },
+                                "&.Mui-focused fieldset": {
+                                  borderColor: "rgb(152 162 179) !important",
+                                  borderWidth: "1px !important",
+                                },
+                                "&.Mui-focused.Mui-error fieldset": {
+                                  borderColor: "rgb(152 162 179) !important",
+                                },
+                              },
+                              "& .MuiInputBase-root.Mui-error": {
+                                color: "rgb(200 204 219) !important",
+                              },
+                              "& .MuiOutlinedInput-root.Mui-error": {
+                                "& fieldset": {
+                                  borderColor: "rgb(152 162 179) !important",
+                                },
+                              },
+                              "& .MuiInputBase-input": {
+                                padding: "0 0 0 12px !important",
+                                width: "453px !important",
+                                height: "42px !important",
+                              },
+                            }}
                           >
-                            <div className="relative">
-                              <label
-                                className="text-xs font-medium"
-                                htmlFor="dob"
-                              >
-                                {t("date of birth")}
-                                <span className="text-red-500"> *</span>
-                              </label>
-                              <Field
-                                type="text"
-                                name="dob"
-                                placeholder="DD / MM / YYYY"
-                                value={selectDOB}
-                                onChange={(e) => setSelectDOB(e.target.value)}
-                                className={`my-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none
-                             ${
-                               errors.dob && touched.dob ? "border-red-700" : ""
-                             }
-                                `}
-                              />
-                              {clickCalendar && (
-                                <div
-                                  className="absolute top-[100%] z-50 bg-white rounded-xl border border-[#98A2B3]"
-                                  ref={calendarRef}
-                                >
-                                  <DatePicker onDateChange={handleDateChange} />
-                                </div>
-                              )}
-                              <img
-                                src={CalendarIcon}
-                                alt="calendar-icon"
-                                className="w-[1rem] absolute top-[55%] right-2 cursor-pointer"
-                              />
-                              {errors.dob && touched.dob && (
-                                <div className="absolute top-11 right-2 w-[1.3rem] bg-white">
-                                  <img src={ErrorIcon} alt="error-icon" />
-                                </div>
-                              )}
-                              <ErrorMessage
-                                name="dob"
-                                component="div"
-                                className="text-red-700 text-xs font-semibold absolute top-1 left-[5.5rem]"
-                              />
-                            </div>
-                          </div>
-                          <div className="flex flex-col relative mt-2">
-                            <label
-                              className="text-xs font-medium"
-                              htmlFor="email"
-                            >
-                              {t("email")}{" "}
-                              <span className="text-red-500">*</span>
-                            </label>
-                            <Field
-                              type="email"
-                              name="email"
-                              placeholder={t("email")}
-                              className={`my-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none
-                                ${
-                                  errors.email && touched.email
-                                    ? "border-red-700"
-                                    : ""
-                                }`}
+                            <DatePicker
+                              value={dayjs(birthDate)}
+                              onChange={(date) => {
+                                setBirthDate(date);
+                                validateBirthDate(date);
+                              }}
+                              onBlur={() => validateBirthDate(birthDate)}
                             />
-                            {errors.email && touched.email && (
-                              <div className="absolute top-9 right-2 w-[1.3rem] bg-white">
-                                <img src={ErrorIcon} alt="error-icon" />
+                          </Stack>
+                          {dobError && (
+                            <>
+                              <div className="text-red-700 bg-white text-xs font-semibold absolute left-[4.54rem] z-10">
+                                {dobError}
                               </div>
-                            )}
-                            <ErrorMessage
-                              name="email"
-                              component="div"
-                              className="text-red-700 text-xs font-semibold absolute top-0 left-[3rem]"
-                            />
-                          </div>
-                          <div className="flex flex-col relative">
-                            <label
-                              className="text-xs font-medium"
-                              htmlFor="password"
-                            >
-                              {t("password")}{" "}
-                              <span className="text-red-500">*</span>
-                            </label>
-                            <Field
-                              type={showPassword ? "text" : "password"}
-                              name="password"
-                              placeholder={t("password")}
-                              className={`my-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none
-                                ${
-                                  errors.password && touched.password
-                                    ? "border-red-700"
-                                    : ""
-                                }`}
-                            />
-                            <div
-                              className="absolute w-[1.2rem] top-[50%] right-3"
-                              onClick={togglePassword}
-                            >
-                              {showPassword ? (
-                                <img src={view} alt="view-password" />
-                              ) : (
-                                <img src={hide} alt="hide-password" />
-                              )}
+                            </>
+                          )}
+                        </LocalizationProvider>
+                      </div>
+                      <div className="flex flex-col relative mt-2">
+                        <label className="text-xs font-medium" htmlFor="email">
+                          {t("email")} <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="email"
+                          name="email"
+                          placeholder={t("email")}
+                          value={email}
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                            validateEmail(e.target.value);
+                          }}
+                          onBlur={(e) => validateEmail(e.target.value)}
+                          className={`my-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none
+                                ${emailError ? "border-red-700" : ""}`}
+                        />
+                        {emailError && (
+                          <>
+                            <div className="absolute top-9 right-2 w-[1.3rem] bg-white">
+                              <img src={ErrorIcon} alt="error-icon" />
                             </div>
-                            {errors.password && touched.password && (
-                              <div className="absolute top-9 right-[0.7rem] w-[1.3rem] bg-white">
-                                <img src={ErrorIcon} alt="error-icon" />
-                              </div>
-                            )}
-                            <ErrorMessage
-                              name="password"
-                              component="div"
-                              className="text-red-700 text-xs font-semibold absolute top-0 left-[4.3rem]"
-                            />
-                          </div>
-                          <div className="flex flex-col relative">
-                            <label
-                              className="text-xs font-medium"
-                              htmlFor="confirmPassword"
-                            >
-                              {t("confirm password")}{" "}
-                              <span className="text-red-500">*</span>
-                            </label>
-                            <Field
-                              type={showConfirmPW ? "text" : "password"}
-                              name="confirmPassword"
-                              placeholder={t("password")}
-                              className={`my-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none ${
-                                errors.confirmPassword &&
-                                touched.confirmPassword
-                                  ? "border-red-700"
-                                  : ""
-                              }`}
-                            />
-                            <div
-                              className="absolute w-[1.2rem] top-[50%] right-3"
-                              onClick={togglePasswordConfirm}
-                            >
-                              {showConfirmPW ? (
-                                <img src={view} alt="view-password" />
-                              ) : (
-                                <img src={hide} alt="hide-password" />
-                              )}
+                            <div className="text-red-700 text-xs font-semibold absolute top-0 left-[3rem]">
+                              {emailError}
                             </div>
-                            {errors.confirmPassword &&
-                              touched.confirmPassword && (
-                                <div className="absolute top-9 right-[0.7rem] w-[1.3rem] bg-white">
-                                  <img src={ErrorIcon} alt="error-icon" />
-                                </div>
-                              )}
-                            <ErrorMessage
-                              name="confirmPassword"
-                              component="div"
-                              className="text-red-700 text-xs font-semibold absolute top-0 left-[7.7rem]"
-                            />
-                          </div>
-                          <div className="flex flex-col relative">
-                            <label
-                              className="text-xs font-medium"
-                              htmlFor="phoneNumber"
-                            >
-                              {t("phone number")}
-                              <span className="text-red-500"> *</span>
-                            </label>
-                            <Field
-                              type="text"
-                              name="phoneNumber"
-                              placeholder="xxx-xxx-xxxx"
-                              className={`my-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none
-                                ${
-                                  errors.phoneNumber && touched.phoneNumber
-                                    ? "border-red-700"
-                                    : ""
-                                }`}
-                            />
-                            {errors.phoneNumber && touched.phoneNumber && (
-                              <div className="absolute top-9 right-[0.7rem] w-[1.3rem] bg-white">
-                                <img src={ErrorIcon} alt="error-icon" />
-                              </div>
-                            )}
-                            <ErrorMessage
-                              name="phoneNumber"
-                              component="div"
-                              className="text-red-700 text-xs font-semibold absolute top-0 left-[6.4rem] w-[10rem]"
-                            />
-                          </div>
+                          </>
+                        )}
+                      </div>
+                      <div className="flex flex-col relative">
+                        <label
+                          className="text-xs font-medium"
+                          htmlFor="password"
+                        >
+                          {t("password")}{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          name="password"
+                          placeholder={t("password")}
+                          value={password}
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                            validatePassword(e.target.value);
+                          }}
+                          onBlur={(e) => validatePassword(e.target.value)}
+                          className={`my-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none
+                                ${passwordError ? "border-red-700" : ""}`}
+                        />
+                        <div
+                          className="absolute w-[1.2rem] top-[50%] right-3"
+                          onClick={togglePassword}
+                        >
+                          {showPassword ? (
+                            <img src={view} alt="view-password" />
+                          ) : (
+                            <img src={hide} alt="hide-password" />
+                          )}
                         </div>
-                        <div className="ml-2 mt-2">
-                          <RadioGender />
+                        {passwordError && (
+                          <>
+                            <div className="absolute top-9 right-[0.7rem] w-[1.3rem] bg-white">
+                              <img src={ErrorIcon} alt="error-icon" />
+                            </div>
+                            <div className="text-red-700 text-xs font-semibold absolute top-0 left-[4.3rem]">
+                              {passwordError}
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <div className="flex flex-col relative">
+                        <label
+                          className="text-xs font-medium"
+                          htmlFor="confirmPassword"
+                        >
+                          {t("confirm password")}{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type={showConfirmPW ? "text" : "password"}
+                          name="confirmPassword"
+                          placeholder={t("password")}
+                          value={confirmPassword}
+                          onChange={(e) => {
+                            setConfirmPassword(e.target.value);
+                            validateConfirmPassword(e.target.value);
+                          }}
+                          onBlur={(e) =>
+                            validateConfirmPassword(e.target.value)
+                          }
+                          className={`my-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none ${
+                            confirmPasswordError ? "border-red-700" : ""
+                          }`}
+                        />
+                        <div
+                          className="absolute w-[1.2rem] top-[50%] right-3"
+                          onClick={togglePasswordConfirm}
+                        >
+                          {showConfirmPW ? (
+                            <img src={view} alt="view-password" />
+                          ) : (
+                            <img src={hide} alt="hide-password" />
+                          )}
                         </div>
-                        <div className="w-[100%] h-[1px] bg-blue-100 my-3"></div>
-                        <div className="relative">
-                          <div className="flex items-start ">
-                            <Checkbox
-                              checked={isCheckboxChecked}
-                              onChange={handleCheckboxChange}
+                        {confirmPasswordError && (
+                          <>
+                            <div className="absolute top-9 right-[0.7rem] w-[1.3rem] bg-white">
+                              <img src={ErrorIcon} alt="error-icon" />
+                            </div>
+                            <div className="text-red-700 text-xs font-semibold absolute top-0 left-[7.7rem]">
+                              {confirmPasswordError}
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <div className="flex flex-col relative">
+                        <label
+                          className="text-xs font-medium"
+                          htmlFor="phoneNumber"
+                        >
+                          {t("phone number")}
+                          <span className="text-red-500"> *</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="phoneNumber"
+                          placeholder="xxx-xxx-xxxx"
+                          value={phoneNumber}
+                          onChange={(e) => {
+                            setPhoneNumber(e.target.value);
+                            validatePhoneNumber(e.target.value);
+                          }}
+                          onBlur={(e) => validatePhoneNumber(e.target.value)}
+                          className={`my-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none
+                                ${phoneNumberError ? "border-red-700" : ""}`}
+                        />
+                        {phoneNumberError && (
+                          <>
+                            <div className="absolute top-9 right-[0.7rem] w-[1.3rem] bg-white">
+                              <img src={ErrorIcon} alt="error-icon" />
+                            </div>
+                            <div className="text-red-700 text-xs font-semibold absolute top-0 left-[6.4rem] w-[10rem]">
+                              {phoneNumberError}
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="ml-2 mt-2">
+                      <FormControl>
+                        <FormLabel className="text-xs font-medium">
+                          {t("gender")}
+                        </FormLabel>
+                        <RadioGroup
+                          value={isSelectGender}
+                          onChange={handleRadioGender}
+                          name="gender"
+                        >
+                          <div className="flex relative">
+                            <Radio
+                              value="female"
+                              label={t("female")}
+                              color="success"
+                              size="sm"
+                              className="mr-8 font-medium"
                               sx={{
-                                color: "#008556",
                                 "&.Mui-checked": {
                                   color: "#008556",
                                 },
                               }}
                             />
-                            <div className="text-sm w-[85%] text-gray mt-2">
-                              {t(
-                                "I am interested in and would like to receive information about products, services, free gifts, discounts, promotions and other relevant activities from 1112 Delivery and"
-                              )}{" "}
-                              <span className="text-green text-sm underline decoration-2">
-                                {t("affiliated companies and relevant brands")}
-                              </span>
-                            </div>
-                            {checkboxError && (
-                              <div className="text-red-700 text-xs font-semibold absolute top-0">
-                                {checkboxError}
+                            <Radio
+                              value="male"
+                              label={t("male")}
+                              color="success"
+                              size="sm"
+                              className="mr-8 font-medium"
+                              sx={{
+                                "&.Mui-checked": {
+                                  color: "#008556",
+                                },
+                              }}
+                            />
+                            <Radio
+                              value="none"
+                              label={t("none")}
+                              color="success"
+                              size="sm"
+                              className="font-medium"
+                              sx={{
+                                "&.Mui-checked": {
+                                  color: "#008556",
+                                },
+                              }}
+                            />
+                            {genderError && (
+                              <div className="absolute text-red-700 text-xs font-semibold">
+                                {genderError}
                               </div>
                             )}
                           </div>
+                        </RadioGroup>
+                      </FormControl>
+                    </div>
+                    <div className="w-[100%] h-[1px] bg-blue-100 my-3"></div>
+                    <div className="relative">
+                      <div className="flex items-start ">
+                        <Checkbox
+                          name="condition"
+                          checked={isCheckboxChecked}
+                          onChange={handleCheckboxChange}
+                          sx={{
+                            color: "#008556",
+                            "&.Mui-checked": {
+                              color: "#008556",
+                            },
+                          }}
+                        />
+                        <div className="text-sm w-[85%] text-gray mt-2">
+                          {t(
+                            "I am interested in and would like to receive information about products, services, free gifts, discounts, promotions and other relevant activities from 1112 Delivery and"
+                          )}{" "}
+                          <span className="text-green text-sm underline decoration-2">
+                            {t("affiliated companies and relevant brands")}
+                          </span>
                         </div>
-                        <button
-                          type="submit"
-                          className="bg-green px-3 py-[0.6rem] rounded-xl text-white text-sm mt-8 hover:bg-[#329C78]"
-                        >
-                          {t("create account")}
-                        </button>
-                      </Form>
-                    )}
-                  </Formik>
+                        {checkboxError && (
+                          <div className="text-red-700 text-xs font-semibold absolute top-[6.7rem] left-[2.5rem]">
+                            {checkboxError}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      onClick={() => dataRegister && navigate("/login")}
+                      className="bg-green px-3 py-[0.6rem] rounded-xl text-white text-sm mt-8 hover:bg-[#329C78]"
+                    >
+                      {t("create account")}
+                    </button>
+                  </form>
                 </div>
               ) : (
                 <div className=" bg-white rounded-lg w-[98%] h-[26.5rem] shadow-xl ml-3 mt-5 py-8 px-12">
