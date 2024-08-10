@@ -8,6 +8,13 @@ export default function ChangeWrapperPage() {
 
   const validPaths = [
     "/pizza",
+    "/pizza/valuepizza",
+    "/pizza/pan",
+    "/pizza/crispythin",
+    "/pizza/extreme",
+    "/pizza/nympizza",
+    "/pizza/newyorkpizza",
+    "/pizza/all",
     "/puff",
     "/puff/:id",
     "/value-set",

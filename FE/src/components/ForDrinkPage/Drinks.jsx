@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import drinkA from "../../assets/drinkA.webp";
 import drinkB from "../../assets/drinkB.webp";
@@ -12,9 +12,11 @@ import drinkI from "../../assets/drinkI.webp";
 import drinkJ from "../../assets/drinkJ.webp";
 import drinkK from "../../assets/drinkK.webp";
 import drinkL from "../../assets/drinkL.webp";
+import { DataContext } from "../../contexts/dataContext";
 
 export default function Drinks() {
   const { t } = useTranslation();
+  const { addToCart } = useContext(DataContext);
 
   const [clickDrink, setClickDrink] = useState(null);
   const clickedRef = useRef([]);
@@ -27,6 +29,20 @@ export default function Drinks() {
   const handleChangeQuantity = (e, index) => {
     const { value } = e.target;
     setQuantity((prev) => ({ ...prev, [index]: parseInt(value, 10) || 0 }));
+  };
+
+  const handleAddToCart = (index) => {
+    const drink = drinks[index];
+    const newQuantity = quantity[index] || 1;
+    const totalPrice = drink.price * newQuantity;
+    addToCart({
+      image: drink.src,
+      name: drink.label,
+      price: drink.price,
+      quantity: newQuantity,
+      totalPrice: totalPrice,
+    });
+    setQuantity((prevQuantity) => ({ ...prevQuantity, [index]: newQuantity }));
   };
 
   useEffect(() => {
@@ -63,7 +79,7 @@ export default function Drinks() {
         {t("select drinks & desserts")}
       </h1>
       <div className="grid grid-cols-3 gap-y-5 mt-7 gap-x-9 mb-5">
-        {drinks.map((item, index) => (
+        {drinks.map((drink, index) => (
           <div
             className="relative w-[18rem] h-[19rem] rounded-xl border border-blue-100 hover:shadow-lg "
             key={index}
@@ -73,10 +89,10 @@ export default function Drinks() {
             }}
             ref={(el) => (clickedRef.current[index] = el)}
           >
-            <img src={item.src} alt={item.label} className="w-[100%]  mt-1" />
-            <p className="text-green text-medium pl-3 mt-2">฿{item.price}</p>
+            <img src={drink.src} alt={drink.label} className="w-[100%]  mt-1" />
+            <p className="text-green text-medium pl-3 mt-2">฿{drink.price}</p>
             <h4 className="text-grey font-semibold text-xl pl-3 mt-1">
-              {item.label}
+              {drink.label}
             </h4>
             {clickDrink === index && (
               <div
@@ -90,9 +106,14 @@ export default function Drinks() {
                   value={quantity[index] || 1}
                   onChange={(e) => handleChangeQuantity(e, index)}
                 />
-                <button className="w-[80%] h-[20%] bg-green rounded-r-xl text-white font-semibold mb-3">
+                <button
+                  onClick={() => handleAddToCart(index, drink)}
+                  className="w-[80%] h-[20%] bg-green rounded-r-xl text-white font-semibold mb-3"
+                >
                   {t("add to cart")} ฿
-                  {quantity[index] ? quantity[index] * item.price : item.price}
+                  {quantity[index]
+                    ? quantity[index] * drink.price
+                    : drink.price}
                 </button>
               </div>
             )}

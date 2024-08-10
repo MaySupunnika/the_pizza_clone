@@ -21,29 +21,59 @@ export default function LoginPage() {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const initialValues = {
-    email: "",
-    password: "",
+  const validateEmail = (value) => {
+    if (!value) {
+      setEmailError("Required");
+    } else if (!/\S+@\S+\.\S+/.test(value)) {
+      setEmailError("Invalid email address");
+    } else {
+      setEmailError(null);
+    }
   };
 
-  const validationSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid email").required("Email is required"),
-    password: Yup.string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters"),
-  });
-  const handleSubmit = async (values, { setErrors }) => {
-    try {
-      await auth.login(values);
-      setErrors(auth.session.error);
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-      navigate("/login");
+  const validatePassword = (value) => {
+    if (!value) {
+      setPasswordError("Required");
+    } else if (value.length < 8) {
+      setPasswordError("Password must be at least 8 characters long");
+    } else if (!/^[A-Za-z0-9]+$/.test(value)) {
+      setPasswordError("Invalid characters");
+    } else {
+      setPasswordError(null);
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    validateEmail(email);
+    validatePassword(password);
+
+    if (!emailError && !passwordError) {
+      try {
+        const dataLogin = await auth.login({
+          email,
+          password,
+        });
+        if (dataLogin) {
+          navigate("/");
+        } else {
+          console.log("Login failed");
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+      }
+    } else {
+      console.log("Validation errors:", { emailError, passwordError });
     }
   };
 
@@ -78,111 +108,109 @@ export default function LoginPage() {
                 <h2 className="text-2xl text-gray font-bold w-[90%] mt-4 mb-5">
                   {t("welcome! To continue, please sign in.")}
                 </h2>
-                <Formik
-                  initialValues={initialValues}
-                  validationSchema={validationSchema}
-                  onSubmit={handleSubmit}
-                >
-                  {({ errors, touched }) => (
-                    <Form>
-                      <label htmlFor="email" className="text-xs font-medium">
-                        {t("email")} <span className="text-red-700">*</span>
-                      </label>
-                      <div className="relative">
-                        <Field
-                          type="email"
-                          id="email"
-                          name="email"
-                          placeholder={t("email")}
-                          className={`my-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none
-                          ${
-                            errors.email && touched.email
-                              ? "border border-red-700"
-                              : ""
-                          }`}
-                          required
-                        />
-                        {errors.email && touched.email && (
-                          <div className="absolute top-5 right-2 w-[1.3rem]">
-                            <img src={ErrorIcon} alt="error-icon" />
-                          </div>
-                        )}
-                        <ErrorMessage
-                          name="email"
-                          component="div"
-                          className="text-red-700 absolute text-xs font-semibold top-[-1.2rem] left-[3rem]"
-                        />
-                      </div>
-                      <label htmlFor="password" className="text-xs font-medium">
-                        {t("password")} <span className="text-red-700">*</span>
-                      </label>
-                      <div className="relative">
-                        <Field
-                          type={showPassword ? "text" : "password"}
-                          id="password"
-                          name="password"
-                          placeholder={t("password")}
-                          className={`mt-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none ${
-                            errors.password && touched.password
-                              ? "border border-red-700"
-                              : ""
-                          }`}
-                          required
-                        />
-                        <div
-                          className="w-[1.5rem] absolute right-[3%] top-[35%]"
-                          onClick={toggleShowPassword}
-                        >
-                          {showPassword ? (
-                            <img src={hide} alt="hide-password" />
-                          ) : (
-                            <img src={view} alt="view-password" />
-                          )}
+                <form onSubmit={handleSubmit}>
+                  <label htmlFor="email" className="text-xs font-medium">
+                    {t("email")} <span className="text-red-700">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={email}
+                      placeholder={t("email")}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        validateEmail(e.target.value);
+                      }}
+                      onBlur={(e) => validateEmail(e.target.value)}
+                      className={`my-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none
+                          ${emailError ? "border border-red-700" : ""}`}
+                      required
+                    />
+                    {emailError && (
+                      <>
+                        <div className="absolute top-5 right-2 w-[1.3rem]">
+                          <img src={ErrorIcon} alt="error-icon" />
                         </div>
-                        {errors.password && touched.password && (
-                          <div className="absolute top-5 right-2 w-[2rem] flex justify-end bg-white">
-                            <img
-                              src={ErrorIcon}
-                              alt="error-icon"
-                              className="w-[1.3rem] "
-                            />
-                          </div>
-                        )}
-                        <ErrorMessage
-                          name="password"
-                          component="div"
-                          className="text-red-700 absolute text-xs font-semibold top-[-1.2rem] left-[4.5rem]"
-                        />
-                      </div>
-                      <p className="text-[#338F25] text-sm font-semibold my-5 cursor-pointer">
-                        {t("forgot password")}
-                      </p>
-
-                      <button
-                        type="submit"
-                        className="bg-[#00794E] w-[100%] rounded-xl text-white text-base py-3 hover:bg-[#329C78]"
-                      >
-                        {t("sign in")}
-                      </button>
-
-                      <p className="w-[100%] text-center my-3 font-semibold">
-                        {t("or")}
-                      </p>
-                      <div className="relative">
-                        <div className="absolute top-[22%] left-[23%]">
+                        <div className="text-red-700 absolute text-xs font-semibold top-[-1.2rem] left-[3rem]">
+                          {emailError}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <label htmlFor="password" className="text-xs font-medium">
+                    {t("password")} <span className="text-red-700">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      name="password"
+                      placeholder={t("password")}
+                      value={password}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                        validatePassword(e.target.value);
+                      }}
+                      onBlur={(e) => validatePassword(e.target.value)}
+                      className={`mt-2 border border-[#98A2B3] rounded-lg w-[100%] py-2 pl-2 placeholder:text-sm focus:outline-none ${
+                        passwordError ? "border border-red-700" : ""
+                      }`}
+                      required
+                    />
+                    <div
+                      className="w-[1.5rem] absolute right-[3%] top-[35%]"
+                      onClick={toggleShowPassword}
+                    >
+                      {showPassword ? (
+                        <img src={hide} alt="hide-password" />
+                      ) : (
+                        <img src={view} alt="view-password" />
+                      )}
+                    </div>
+                    {passwordError && (
+                      <>
+                        <div className="absolute top-5 right-2 w-[2rem] flex justify-end bg-white">
                           <img
-                            src={FBicon}
-                            alt="facebook-icon"
-                            className="w-[1.5rem]"
+                            src={ErrorIcon}
+                            alt="error-icon"
+                            className="w-[1.3rem] "
                           />
                         </div>
-                        <button className="bg-[#1877F2] w-[100%] rounded-xl text-white text-base py-3 pl-8">
-                          {t("sign in with facebook")}
-                        </button>
-                      </div>
-                    </Form>
-                  )}
-                </Formik>
+                        <div className="text-red-700 absolute text-xs font-semibold top-[-1.2rem] left-[4.5rem]">
+                          {passwordError}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <p className="text-[#338F25] text-sm font-semibold my-5 cursor-pointer">
+                    {t("forgot password")}
+                  </p>
+
+                  <button
+                    type="submit"
+                    className="bg-[#00794E] w-[100%] rounded-xl text-white text-base py-3 hover:bg-[#329C78]"
+                  >
+                    {t("sign in")}
+                  </button>
+
+                  <p className="w-[100%] text-center my-3 font-semibold">
+                    {t("or")}
+                  </p>
+                  <div className="relative">
+                    <div className="absolute top-[22%] left-[23%]">
+                      <img
+                        src={FBicon}
+                        alt="facebook-icon"
+                        className="w-[1.5rem]"
+                      />
+                    </div>
+                    <button className="bg-[#1877F2] w-[100%] rounded-xl text-white text-base py-3 pl-8">
+                      {t("sign in with facebook")}
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>

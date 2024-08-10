@@ -1,140 +1,3 @@
-// import React, { useState } from "react";
-// import axios from "axios";
-// import { useNavigate } from "react-router-dom";
-// import { jwtDecode } from "jwt-decode";
-
-// const AuthContext = React.createContext();
-
-// function AuthProvider(props) {
-//   const [session, setSession] = useState({
-//     loading: null,
-//     error: null,
-//     user: null,
-//     admin: null,
-//   });
-//   const navigate = useNavigate();
-
-//   const login = async (data) => {
-//     try {
-//       setSession({ ...session, error: null });
-//       const results = await axios.post(
-//         "http://localhost:4000/auth/login",
-//         data
-//       );
-//       if (!results.data.token) {
-//         setSession({ ...session, error: results.data.message });
-//       } else {
-//         const token = results.data.token;
-//         const userDataFromToken = jwtDecode(token);
-//         setSession({ ...session, user: userDataFromToken, error: null });
-//         const redirectPage = localStorage.getItem("previousPage") || "/";
-//         navigate(redirectPage);
-//         localStorage.setItem("token", token);
-//         localStorage.removeItem("previousPage");
-//       }
-//     } catch (error) {
-//       console.error("Login error:", error);
-//       setSession({ ...session, error: error.message });
-//     }
-//   };
-
-//   const adminLogin = async (data) => {
-//     try {
-//       setSession({ ...session, error: null });
-//       const results = await axios.post(
-//         "http://localhost:4000/auth/admin/login",
-//         data
-//       );
-//       if (!results.data.token) {
-//         setSession({ ...session, error: results.data.message });
-//       } else {
-//         const token = results.data.token;
-//         const userDataFromToken = jwtDecode(token);
-//         if (userDataFromToken.role !== "admin") {
-//           setSession({ ...session, error: "Unauthorized access" });
-//           navigate("/");
-//         } else {
-//           setSession({ ...session, admin: userDataFromToken, error: null });
-//           navigate("/admin");
-//           localStorage.setItem("role", "admin");
-//           localStorage.setItem("token", token);
-//         }
-//       }
-//     } catch (error) {
-//       console.error("Admin login error:", error);
-//       setSession({ ...session, error: error.message });
-//     }
-//   };
-
-//   const register = async (data) => {
-//     try {
-//       const result = await axios.post(
-//         "http://localhost:4000/auth/register",
-//         data
-//       );
-//       console.log("Response status:", result.status);
-//       console.log("Response data:", result.data);
-
-//       if (result.data.message === "Register Successfully") {
-//         setSession({ ...session, error: null });
-//         navigate("/login");
-//       } else if (result.data.message === "Email already signed in") {
-//         setSession({ ...session, error: result.data.message });
-//         navigate("/register");
-//       } else {
-//         alert("API INVALID");
-//       }
-//     } catch (error) {
-//       console.error("Register error:", error);
-//       setSession({ ...session, error: error.message });
-//     }
-//   };
-
-//   const logout = () => {
-//     localStorage.removeItem("token");
-//     localStorage.removeItem("role");
-//     localStorage.removeItem("previousPage");
-//     setSession({ loading: null, error: null, user: null, admin: null });
-//     navigate("/");
-//   };
-
-//   const isAdmin = Boolean(localStorage.getItem("role"));
-//   const isAuthenicated = Boolean(localStorage.getItem("token") && !isAdmin);
-//   const isAdminAuthenticated = Boolean(
-//     localStorage.getItem("token") && isAdmin
-//   );
-
-//   if (isAuthenicated) {
-//     const token = localStorage.getItem("token");
-//     setSession({ ...session, user: jwtDecode(token) });
-//   }
-
-//   if (isAdminAuthenticated) {
-//     const token = localStorage.getItem("token");
-//     setSession({ ...session, admin: jwtDecode(token) });
-//   }
-
-//   return (
-//     <AuthContext.Provider
-//       value={{
-//         session,
-//         login,
-//         logout,
-//         register,
-//         isAuthenicated,
-//         isAdminAuthenticated,
-//         adminLogin,
-//         isAdmin,
-//       }}
-//     >
-//       {props.children}
-//     </AuthContext.Provider>
-//   );
-// }
-
-// const useAuth = () => React.useContext(AuthContext);
-
-// export { AuthProvider, useAuth };
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -180,43 +43,43 @@ function AuthProvider(props) {
     }
   };
 
-  const adminLogin = async (data) => {
-    try {
-      setSession({ ...session, error: null });
-      console.log("Sending admin login request with data:", data);
-      const results = await axios.post(
-        "http://localhost:4000/auth/admin/login",
-        data
-      );
-      console.log("Admin login response:", results);
+  // const adminLogin = async (data) => {
+  //   try {
+  //     setSession({ ...session, error: null });
+  //     console.log("Sending admin login request with data:", data);
+  //     const results = await axios.post(
+  //       "http://localhost:4000/auth/admin/login",
+  //       data
+  //     );
+  //     console.log("Admin login response:", results);
 
-      if (!results.data.token) {
-        console.error(
-          "Admin login failed, no token received:",
-          results.data.message
-        );
-        setSession({ ...session, error: results.data.message });
-      } else {
-        const token = results.data.token;
-        const userDataFromToken = jwtDecode(token);
-        console.log("Decoded admin token data:", userDataFromToken);
+  //     if (!results.data.token) {
+  //       console.error(
+  //         "Admin login failed, no token received:",
+  //         results.data.message
+  //       );
+  //       setSession({ ...session, error: results.data.message });
+  //     } else {
+  //       const token = results.data.token;
+  //       const userDataFromToken = jwtDecode(token);
+  //       console.log("Decoded admin token data:", userDataFromToken);
 
-        if (userDataFromToken.role !== "admin") {
-          console.error("Unauthorized access: user is not an admin");
-          setSession({ ...session, error: "Unauthorized access" });
-          navigate("/");
-        } else {
-          setSession({ ...session, admin: userDataFromToken, error: null });
-          navigate("/admin");
-          localStorage.setItem("role", "admin");
-          localStorage.setItem("token", token);
-        }
-      }
-    } catch (error) {
-      console.error("Admin login error:", error);
-      setSession({ ...session, error: error.message });
-    }
-  };
+  //       if (userDataFromToken.role !== "admin") {
+  //         console.error("Unauthorized access: user is not an admin");
+  //         setSession({ ...session, error: "Unauthorized access" });
+  //         navigate("/");
+  //       } else {
+  //         setSession({ ...session, admin: userDataFromToken, error: null });
+  //         navigate("/admin");
+  //         localStorage.setItem("role", "admin");
+  //         localStorage.setItem("token", token);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Admin login error:", error);
+  //     setSession({ ...session, error: error.message });
+  //   }
+  // };
 
   const register = async (data) => {
     try {
@@ -243,26 +106,11 @@ function AuthProvider(props) {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
-    localStorage.removeItem("previousPage");
     setSession({ loading: null, error: null, user: null, admin: null });
     navigate("/");
   };
 
-  const isAdmin = Boolean(localStorage.getItem("role"));
-  const isAuthenicated = Boolean(localStorage.getItem("token") && !isAdmin);
-  const isAdminAuthenticated = Boolean(
-    localStorage.getItem("token") && isAdmin
-  );
-
-  if (isAuthenicated) {
-    const token = localStorage.getItem("token");
-    setSession({ ...session, user: jwtDecode(token) });
-  }
-
-  if (isAdminAuthenticated) {
-    const token = localStorage.getItem("token");
-    setSession({ ...session, admin: jwtDecode(token) });
-  }
+  const isAuthenicated = Boolean(localStorage.getItem("token"));
 
   return (
     <AuthContext.Provider
@@ -272,9 +120,6 @@ function AuthProvider(props) {
         logout,
         register,
         isAuthenicated,
-        isAdminAuthenticated,
-        adminLogin,
-        isAdmin,
       }}
     >
       {props.children}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import pastaA from "../../assets/pastaA.webp";
 import pastaB from "../../assets/pastaB.webp";
@@ -12,9 +12,12 @@ import pastaI from "../../assets/pastaI.webp";
 import pastaJ from "../../assets/pastaJ.webp";
 import pastaK from "../../assets/pastaK.webp";
 import pastaL from "../../assets/pastaL.webp";
+import { DataContext } from "../../contexts/dataContext";
 
 export default function Pasta() {
   const { t } = useTranslation();
+
+  const { addToCart } = useContext(DataContext);
 
   const [clickPasta, setClickPasta] = useState(null);
   const clickedRef = useRef([]);
@@ -27,6 +30,20 @@ export default function Pasta() {
   const handleChangeQuantity = (e, index) => {
     const { value } = e.target;
     setQuantity((prev) => ({ ...prev, [index]: parseInt(value, 10) || 0 }));
+  };
+
+  const handleAddToCart = (index) => {
+    const pasta = pastas[index];
+    const newQuantity = quantity[index] || 1;
+    const totalPrice = pasta.price * newQuantity;
+    addToCart({
+      image: pasta.src,
+      name: pasta.label,
+      price: pasta.price,
+      quantity: newQuantity,
+      totalPrice: totalPrice,
+    });
+    setQuantity((prevQuantity) => ({ ...prevQuantity, [index]: newQuantity }));
   };
 
   useEffect(() => {
@@ -81,7 +98,7 @@ export default function Pasta() {
     <div className="w-[55rem] mt-5">
       <h1 className="text-green text-5xl font-bold">{t("select pasta")}</h1>
       <div className="grid grid-cols-3 gap-y-5 mt-7 gap-x-9 mb-5">
-        {pastas.map((item, index) => (
+        {pastas.map((pasta, index) => (
           <div
             className="relative w-[18rem] h-[19rem] rounded-xl border border-blue-100 hover:shadow-lg "
             key={index}
@@ -91,10 +108,10 @@ export default function Pasta() {
             }}
             ref={(el) => (clickedRef.current[index] = el)}
           >
-            <img src={item.src} alt={item.label} className="w-[100%]  mt-1" />
-            <p className="text-green text-medium pl-3 mt-2">฿{item.price}</p>
+            <img src={pasta.src} alt={pasta.label} className="w-[100%]  mt-1" />
+            <p className="text-green text-medium pl-3 mt-2">฿{pasta.price}</p>
             <h4 className="text-grey font-semibold text-xl pl-3 mt-1">
-              {item.label}
+              {pasta.label}
             </h4>
             {clickPasta === index && (
               <div
@@ -108,9 +125,14 @@ export default function Pasta() {
                   value={quantity[index] || 1}
                   onChange={(e) => handleChangeQuantity(e, index)}
                 />
-                <button className="w-[80%] h-[20%] bg-green rounded-r-xl text-white font-semibold mb-3">
+                <button
+                  onClick={() => handleAddToCart(index, pasta)}
+                  className="w-[80%] h-[20%] bg-green rounded-r-xl text-white font-semibold mb-3"
+                >
                   {t("add to cart")} ฿
-                  {quantity[index] ? quantity[index] * item.price : item.price}
+                  {quantity[index]
+                    ? quantity[index] * pasta.price
+                    : pasta.price}
                 </button>
               </div>
             )}

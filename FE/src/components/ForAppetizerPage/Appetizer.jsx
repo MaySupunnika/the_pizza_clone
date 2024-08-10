@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import crispy_onions from "../../assets/crispy-onions.webp";
 import french_fries from "../../assets/french-fries.webp";
@@ -14,9 +14,12 @@ import cheese_stick from "../../assets/cheese-sticks.webp";
 import baked_spinach from "../../assets/baked-spinach.webp";
 import bbq_dipping from "../../assets/bbq-dip-sauce.webp";
 import cocktail_sauce from "../../assets/cocktail-sauce.webp";
+import { DataContext } from "../../contexts/dataContext";
 
 export default function Appetizer() {
   const { t } = useTranslation();
+
+  const { addToCart } = useContext(DataContext);
 
   const [clickAppetizer, setClickAppetizer] = useState(null);
   const clickedRef = useRef([]);
@@ -29,6 +32,20 @@ export default function Appetizer() {
   const handleChangeQuantity = (e, index) => {
     const { value } = e.target;
     setQuantity((prev) => ({ ...prev, [index]: parseInt(value, 10) || 0 }));
+  };
+
+  const handleAddToCart = (index) => {
+    const appetizer = appetizers[index];
+    const newQuantity = quantity[index] || 1;
+    const totalPrice = appetizer.price * newQuantity;
+    addToCart({
+      image: appetizer.src,
+      name: appetizer.label,
+      price: appetizer.price,
+      quantity: newQuantity,
+      totalPrice: totalPrice,
+    });
+    setQuantity((prevQuantity) => ({ ...prevQuantity, [index]: newQuantity }));
   };
 
   useEffect(() => {
@@ -102,7 +119,10 @@ export default function Appetizer() {
                   value={quantity[index] || 1}
                   onChange={(e) => handleChangeQuantity(e, index)}
                 />
-                <button className="w-[80%] h-[20%] bg-green rounded-r-xl text-white font-semibold mb-3">
+                <button
+                  onClick={() => handleAddToCart(index, appetizer)}
+                  className="w-[80%] h-[20%] bg-green rounded-r-xl text-white font-semibold mb-3"
+                >
                   {t("add to cart")} ฿
                   {quantity[index]
                     ? quantity[index] * appetizer.price
