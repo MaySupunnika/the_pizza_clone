@@ -77,7 +77,7 @@ export default function valuePizza() {
   return (
     <div className="w-[55rem] mt-5 mb-[4rem]">
       <h2 className="text-gray text-5xl font-bold">{t("super value")}</h2>
-      <div className="grid grid-cols-3 gap-7 mt-[3rem]">
+      <div className="relative grid grid-cols-3 gap-7 mt-[3rem]">
         {valuePizzas.map((valuePizza, index) => (
           <div
             key={index}
@@ -97,26 +97,35 @@ export default function valuePizza() {
             <h5 className="text-gray text-[1rem] pl-3 mt-1">
               {valuePizza.detail}
             </h5>
+
             <div
-              className="flex items-end h-[100%] w-[100%] absolute top-0 bg-gradient-to-t from-white opacity-0 group-hover:opacity-100 transition-opacity"
+              className="flex flex-col h-[100%] w-[100%] absolute bottom-0 bg-gradient-to-t from-white opacity-0 group-hover:opacity-100 transition-opacity"
               onClick={(e) => e.stopPropagation()}
             >
-              <input
-                type="number"
-                className="w-[20%] h-[20%] rounded-l-xl border-2 border-green flex justify-start text-gray pl-4 mb-3 focus:outline-none"
-                min={1}
-                value={quantity[index] || 1}
-                onChange={(e) => handleChangeQuantity(e, index)}
-              />
-              <button
-                onClick={() => handleAddToCart(index, valuePizza)}
-                className="w-[80%] h-[20%] bg-green rounded-r-xl text-white font-semibold mb-3"
-              >
-                {t("add to cart")} ฿
-                {quantity[index]
-                  ? quantity[index] * valuePizza.price
-                  : valuePizza.price}
-              </button>
+              <div className="w-[3rem] h-[3rem] flex justify-center items-center absolute z-10 bottom-[6.8rem] right-5 rounded-full bg-green text-white font-semibold hover:bg-[#319C78]">
+                M
+              </div>
+              <div className="w-[100%] h-[13%] rounded-t-xl border border-green absolute z-10 bottom-[3.5rem] flex justify-center items-center text-green bg-white text-medium cursor-pointer hover:bg-[#319C78] hover:border-none hover:text-white">
+                {t("modify")}
+              </div>
+              <div className="flex items-end h-[80%] w-[100%] absolute bottom-0">
+                <input
+                  type="number"
+                  className="w-[20%] h-[17%] rounded-bl-xl border border-green flex justify-start text-gray pl-4 mb-3 focus:outline-none"
+                  min={1}
+                  value={quantity[index] || 1}
+                  onChange={(e) => handleChangeQuantity(e, index)}
+                />
+                <button
+                  onClick={() => handleAddToCart(index, valuePizza)}
+                  className="w-[80%] h-[17%] bg-green rounded-br-xl text-white font-semibold mb-3 hover:bg-[#319C78]"
+                >
+                  {t("add to cart")} ฿
+                  {quantity[index]
+                    ? quantity[index] * valuePizza.price
+                    : valuePizza.price}
+                </button>
+              </div>
             </div>
           </div>
         ))}
